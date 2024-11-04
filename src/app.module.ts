@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { CitiesModule } from './cities/citites.module';
-import { CityEntity } from './cities/entities/city';
+import { CitiesModule } from './modules/cities/citites.module';
+import { CityEntity } from './modules/cities/entities/city';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
-import { PollsModule } from './polls/polls.module';
+import { PollsModule } from './modules/polls/polls.module';
 
 @Module({
   imports: [

@@ -7,13 +7,13 @@ import { PollEstimateResponse } from './responses/pollEstimate.response';
 export class CitiesController {
   constructor(private readonly citiesService: CitiesService) {}
 
-  @Patch("/cities/update")
-  updateCitiesData(): Promise<void> {
-    return this.citiesService.updateCitiesData();
-  }
-  
   @Get("/cities/estimate")
   estimateFromPoll(@Query() estimateDto: EstimateDto): Promise<PollEstimateResponse> {
     return this.citiesService.estimateFromPoll(estimateDto);
+  }
+
+  @Patch("/cities/update")
+  updateCitiesData(): Promise<void> {
+    return this.citiesService.updateCitiesData();
   }
 }

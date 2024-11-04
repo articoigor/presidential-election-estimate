@@ -6,6 +6,7 @@ import { Candidate, Group, PollEstimateResponse } from './responses/pollEstimate
 import * as fs from 'fs';
 import { VoteDto } from './dtos/vote.dto';
 import * as iconv from 'iconv-lite';
+import { CityEntity } from './entities/city';
 
 const groupsDescriptions = {
   1: "Até 20 mil habitantes",
@@ -17,6 +18,18 @@ const groupsDescriptions = {
 @Injectable()
 export class CitiesService {
   constructor(private citiesRepository: CitiesRepository){}
+
+  async estimateFromPoll(estimateDto: EstimateDto): Promise<PollEstimateResponse> {
+    const pollByCity = await this.extractPollFromPath(estimateDto.pollName);
+
+    const cityMap = new Map();
+
+    const candidateMap = new Map();
+
+    await this.processVotes(pollByCity, cityMap, candidateMap);
+
+    return this.generateResults(candidateMap);
+  }
   async updateCitiesData(): Promise<void> {
     const cities = await this.citiesRepository.getCitiesIds();
 
@@ -37,14 +50,8 @@ export class CitiesService {
     await Promise.all(updatedCitiesProms);
   }
 
-  async estimateFromPoll(estimateDto: EstimateDto): Promise<PollEstimateResponse> {
-    const pollByCity = await this.extractPollFromPath(estimateDto.pollName);
-
-    const cityMap = new Map();
-
-    const candidateMap = new Map();
-
-    for(const voteOption of pollByCity){
+  private async processVotes(poll: VoteDto[], cityMap: Map<string, CityEntity>, candidateMap: Map<string, any>){
+    for(const voteOption of poll){
       if(voteOption.vote == '#') continue;
 
       const sanitizedName = this.sanitizeName(voteOption.cityName);
@@ -80,7 +87,9 @@ export class CitiesService {
 
       candidate.votes.totalByGroups[group.id] += group.weight;
     }
+  }
 
+  private generateResults(candidateMap: Map<string,any>): PollEstimateResponse{
     const candidates: Candidate[] = [];
 
     const totalVotes = Array.from(candidateMap.values()).reduce((acc,curr) =>  curr.votes.candidateTotal + acc, 0);
@@ -98,7 +107,6 @@ export class CitiesService {
 
     return new PollEstimateResponse(candidates);
   }
-
   private async extractPollFromPath(file: string): Promise<VoteDto[]> {
     try{
       const data = fs.readFileSync(`polls/${file}.csv`);
