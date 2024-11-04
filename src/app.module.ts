@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { EstimateModule } from './estimate/estimate.module';
 import { CitiesModule } from './cities/citites.module';
 import { CityEntity } from './cities/entities/city';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -7,8 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
-    EstimateModule, 
+    ConfigModule.forRoot(), 
     CitiesModule,
     TypeOrmModule.forRoot({
       type: 'mssql',

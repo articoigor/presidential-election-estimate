@@ -17,13 +17,25 @@ export class CitiesRepository {
         return this.client.query(`MERGE INTO Cities AS target
                                 USING (SELECT ${city.id} AS id, '${city.name}' AS name, '${city.uf}' AS uf, ${city.population} AS population, '${city.updated_at}' AS updated_at) AS source
                                 ON target.id = source.id
-                                WHEN MATCHED AND target.population <> source.population THEN
+                                WHEN MATCHED AND (target.population <> source.population OR target.name <> source.name) THEN
                                     UPDATE SET 
+                                        target.name = source.name,
                                         target.population = source.population
                                 WHEN NOT MATCHED THEN
                                     INSERT (id, name, uf, population, updated_at)
                                     VALUES (source.id, source.name, source.uf, source.population, source.updated_at);
                                   `);
+    }
+
+    async getCityByName(cityName: string, uf: string): Promise<CityEntity> {
+        const ans = await this.client.query(`SELECT *
+            FROM Cities
+            WHERE name = '${cityName}' AND uf = '${uf}'
+            `);
+
+        if(ans.length > 0) return ans[0];
+
+        return null;
     }
 
     async getCitiesIds(): Promise<CityEntity[]> {
