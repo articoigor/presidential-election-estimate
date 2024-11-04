@@ -17,10 +17,10 @@ export class CitiesRepository {
         return this.client.query(`MERGE INTO Cities AS target
                                 USING (SELECT ${city.id} AS id, '${city.name}' AS name, '${city.uf}' AS uf, ${city.population} AS population, '${city.updated_at}' AS updated_at) AS source
                                 ON target.id = source.id
-                                WHEN MATCHED AND (target.population <> source.population OR target.name <> source.name) THEN
+                                WHEN MATCHED AND (target.population <> source.population) THEN
                                     UPDATE SET 
-                                        target.name = source.name,
-                                        target.population = source.population
+                                        target.population = source.population,
+                                        target.updated_at = source.updated_at
                                 WHEN NOT MATCHED THEN
                                     INSERT (id, name, uf, population, updated_at)
                                     VALUES (source.id, source.name, source.uf, source.population, source.updated_at);
