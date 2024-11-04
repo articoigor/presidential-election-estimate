@@ -109,7 +109,7 @@ export class CitiesService {
   }
   private async extractPollFromPath(file: string): Promise<VoteDto[]> {
     try{
-      const data = fs.readFileSync(`polls/${file}.csv`);
+      const data = fs.readFileSync(`assets/polls/${file}.csv`);
 
       const csvData = iconv.decode(data, 'windows-1252');
 
