@@ -28,6 +28,7 @@ Os municípios são classificados em quatro grupos, de acordo com sua populaçã
 
 - **Nest.js**: Framework para construção de aplicações backEnd em Node.js (TypeScript).
 - **Multer**: Middleware para manipulação de arquivos (recepção do binário do .csv com os resultados das pesquisa de intenção).
+- **Azure SQL Server**: Banco de dados relacional hospedado em nuvem.
 
 ## Execução
 
@@ -35,4 +36,4 @@ Os municípios são classificados em quatro grupos, de acordo com sua populaçã
 
 ## Demonstração
 
-[![Watch the video](https://img.youtube.com/vi/VIDEO_ID/0.jpg)](https://www.youtube.com/watch?v=VIDEO_ID)
+[![Watch the video](https://img.youtube.com/vi/de6OTQ41bjM/0.jpg)](https://www.youtube.com/watch?v=de6OTQ41bjM)
