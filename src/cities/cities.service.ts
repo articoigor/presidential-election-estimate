@@ -124,7 +124,6 @@ export class CitiesService {
   }
 
   private defineGroup(population: number){
-    console.log(population);
     if(population > -1 && population <= 20000){
       return {
         id: 1,

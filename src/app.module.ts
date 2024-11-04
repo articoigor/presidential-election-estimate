@@ -3,11 +3,13 @@ import { CitiesModule } from './cities/citites.module';
 import { CityEntity } from './cities/entities/city';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
+import { PollsModule } from './polls/polls.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot(), 
     CitiesModule,
+    PollsModule,
     TypeOrmModule.forRoot({
       type: 'mssql',
       host: 'polls-estimate.database.windows.net',
