@@ -30,6 +30,7 @@ export class CitiesService {
 
     return this.generateResults(candidateMap);
   }
+  
   async updateCitiesData(): Promise<void> {
     const cities = await this.citiesRepository.getCitiesIds();
 
@@ -59,6 +60,8 @@ export class CitiesService {
       if(!cityMap.has(sanitizedName)){
         const city = await this.citiesRepository.getCityByName(sanitizedName, voteOption.uf);
 
+        if(!city) continue;
+        
         cityMap.set(sanitizedName, city);
       }
 
