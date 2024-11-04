@@ -7,6 +7,8 @@ import * as fs from 'fs';
 import { VoteDto } from './dtos/vote.dto';
 import * as iconv from 'iconv-lite';
 import { CityEntity } from './entities/city';
+import { PollsService } from '../polls/polls.service';
+import { PollVariationResponse, Result, Variation } from './responses/pollVariation.response';
 
 const groupsDescriptions = {
   1: "Até 20 mil habitantes",
@@ -17,7 +19,10 @@ const groupsDescriptions = {
 
 @Injectable()
 export class CitiesService {
-  constructor(private citiesRepository: CitiesRepository){}
+  constructor(
+    private citiesRepository: CitiesRepository,
+    private pollsService: PollsService)
+    {}
 
   async estimateFromPoll(estimateDto: EstimateDto): Promise<PollEstimateResponse> {
     const pollByCity = await this.extractPollFromPath(estimateDto.pollName);
@@ -26,9 +31,29 @@ export class CitiesService {
 
     const candidateMap = new Map();
 
-    await this.processVotes(pollByCity, cityMap, candidateMap);
+    const date = await this.processVotes(pollByCity, cityMap, candidateMap);
 
-    return this.generateResults(candidateMap);
+    return this.generateResults(candidateMap, date);
+  }
+
+  async exhibitPollVariation(): Promise<PollVariationResponse> {
+    const polls = await this.pollsService.getAllPolls();
+
+    const response: Variation[] = [];
+
+    for(const poll of polls){
+      const res = await this.estimateFromPoll(new EstimateDto(poll));
+
+      const pollRes: Result[] = [];
+      
+      for(const candidate of res.candidates){
+        pollRes.push(new Result(candidate.name, candidate.votePercentage));
+      }
+
+      response.push(new Variation(res.date, pollRes));
+    }
+
+    return new PollVariationResponse(response);
   }
   
   async updateCitiesData(): Promise<void> {
@@ -51,7 +76,7 @@ export class CitiesService {
     await Promise.all(updatedCitiesProms);
   }
 
-  private async processVotes(poll: VoteDto[], cityMap: Map<string, CityEntity>, candidateMap: Map<string, any>){
+  private async processVotes(poll: VoteDto[], cityMap: Map<string, CityEntity>, candidateMap: Map<string, any>): Promise<string>{
     for(const voteOption of poll){
       if(voteOption.vote == '#') continue;
 
@@ -90,9 +115,11 @@ export class CitiesService {
 
       candidate.votes.totalByGroups[group.id] += group.weight;
     }
+
+    return poll[0].date;
   }
 
-  private generateResults(candidateMap: Map<string,any>): PollEstimateResponse{
+  private generateResults(candidateMap: Map<string,any>, pollDate: string): PollEstimateResponse{
     const candidates: Candidate[] = [];
 
     const totalVotes = Array.from(candidateMap.values()).reduce((acc,curr) =>  curr.votes.candidateTotal + acc, 0);
@@ -108,7 +135,7 @@ export class CitiesService {
         candidates.push(new Candidate(candidate.name, candidate.votes.candidateTotal, `${percentage}%`, groups));
     }
 
-    return new PollEstimateResponse(candidates);
+    return new PollEstimateResponse(pollDate, candidates);
   }
   private async extractPollFromPath(file: string): Promise<VoteDto[]> {
     try{

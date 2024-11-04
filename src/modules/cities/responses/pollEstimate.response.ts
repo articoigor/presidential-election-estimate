@@ -1,7 +1,9 @@
 export class PollEstimateResponse {
+    date: string;
     candidates: Candidate[];
 
-    constructor(candidates: Candidate[]){
+    constructor(date: string, candidates: Candidate[]){
+        this.date = date;
         this.candidates = candidates;
     }
 }

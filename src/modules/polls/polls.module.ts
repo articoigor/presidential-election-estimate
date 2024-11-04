@@ -6,5 +6,6 @@ import { PollsService } from './polls.service';
   imports: [],
   controllers: [PollsController],
   providers: [PollsService],
+  exports: [PollsService],
 })
 export class PollsModule {}
