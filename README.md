@@ -38,4 +38,4 @@ Os municípios são classificados em quatro grupos, de acordo com sua populaçã
 
 O elemento abaixo redireciona para o youtube, onde hospedei o vídeo de apresentação dessa aplicação:
 
-[![Watch the video](https://img.youtube.com/vi/de6OTQ41bjM/453453.jpg)](https://www.youtube.com/watch?v=de6OTQ41bjM)
+[![Watch the video](https://img.youtube.com/vi/de6OTQ41bjM/0.jpg)](https://www.youtube.com/watch?v=de6OTQ41bjM)
