@@ -24,8 +24,6 @@ Os municípios são classificados em quatro grupos, de acordo com sua populaçã
 - Node.js
 - npm
 
-## Uso
-
 ## Tecnologias Utilizadas
 
 - **Nest.js**: Framework para construção de aplicações backEnd em Node.js (TypeScript).
@@ -33,6 +31,8 @@ Os municípios são classificados em quatro grupos, de acordo com sua populaçã
 
 ## Execução
 
+1. Basta utilizar o comando _npm run start_, tendo o arquivo .env já no diretório principal (encaminharei como anexo junto ao link deste repositório) !
+
 ## Demonstração
 
-<video src="assets/presentation.mp4" controls="controls" style="max-width: 100%;">
+[![Watch the video](https://img.youtube.com/vi/VIDEO_ID/0.jpg)](https://www.youtube.com/watch?v=VIDEO_ID)
